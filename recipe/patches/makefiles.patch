@@ -1,0 +1,72 @@
+diff --git a/lib/makefile b/lib/makefile
+index 27eedf4..bdf28ca 100644
+--- a/lib/makefile
++++ b/lib/makefile
+@@ -5,25 +5,17 @@ endif
+ LHAPDFINC = $(shell $(LHAPDF)/bin/lhapdf-config --incdir)
+ LHAPDFLIB = $(shell $(LHAPDF)/bin/lhapdf-config --libdir)
+ 
+-
+-
+-CC  = gcc
+-CXX = g++
+-FC  = gfortran
+-AR  = ar
+-RANLIB = ranlib
+-
+ IFLAGS = -I. -I../src/Hathor -I../src/Hathor/TopPairs \
+ 	-I../src/Hathor/SingleTop -I$(LHAPDFINC)
+ 
+ MYLIBS =  -L $(LHAPDFLIB)  -lLHAPDF
+ 
+-LFLAGS := $(MYLIBS) $(LFLAGS) -lgfortranbegin -lgfortran -lm
++LFLAGS := $(MYLIBS) $(LFLAGS) -lgfortran -lm
+ FFLAGS := -ffixed-line-length-132
+ 
+ # default configuration
+-CFLAGS := $(CFLAGS) -O2 -Wall
+-FFLAGS := $(FFLAGS)
++CFLAGS := $(CFLAGS) -O2 -Wall -fPIC
++FFLAGS := $(FFLAGS) -fPIC -std=legacy
+ 
+ OBJECTS = AbstractHathor.o Hathor.o HathorFits.o ranlxd.o mstwpdf.o \
+           HathorPdf.o SgTop.o SgTopSChannel.o SgTopTChannel.o SgTopWtChannel.o \
+diff --git a/makefile b/makefile
+index 58d58fe..159d95c 100644
+--- a/makefile
++++ b/makefile
+@@ -8,20 +8,14 @@ LHAPDFLIB = $(shell $(LHAPDF)/bin/lhapdf-config --libdir)
+ 
+ HATHORPATH = .
+ 
+-CC  = gcc
+-CXX = g++
+-FC  = gfortran
+-AR  = ar
+-RANLIB = ranlib
+-
+ IFLAGS = -I. -I$(LHAPDFINC) -I$(HATHORPATH)/include
+ MYLIBS =  -L $(HATHORPATH)/lib -lHathor -L $(LHAPDFLIB) -lLHAPDF -lff 
+ 
+-LFLAGS := $(MYLIBS) $(LFLAGS) -lgfortranbegin -lgfortran -lm
++LFLAGS := $(MYLIBS) $(LFLAGS) -lgfortran -lm
+ 
+ # default configuration
+-CFLAGS := $(CFLAGS) -O2 -Wall
+-FFLAGS := $(FFLAGS)
++CFLAGS := $(CFLAGS) -O2 -Wall -fPIC
++FFLAGS := $(FFLAGS) -fPIC -std=legacy
+ 
+ DEMOS =  demo demo_sgtop
+ 
+diff --git a/src/ff/makefile b/src/ff/makefile
+index 1b2a3eb..e3e03cb 100644
+--- a/src/ff/makefile
++++ b/src/ff/makefile
+@@ -1,5 +1,3 @@
+-FC = gfortran
+-
+ LIBRARY	      = libff.a
+ 
+ AAOBJS	      = aaxbx.o \
+-- 
