@@ -4,7 +4,8 @@ export LHAPDF=$(lhapdf-config --prefix)
 
 # Library
 cd lib
-make -j$(nproc)
+NPROC=$(nproc 2>/dev/null || sysctl -n hw.ncpu)
+make -j$NPROC
 
 cd ..
 # make -j$(nproc) # Demo (notice: obsolete gfortranbeing)
