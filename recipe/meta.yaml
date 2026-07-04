@@ -11,10 +11,11 @@ package:
   version: {{ environ.get('ANACONDA_VERSION', version)|replace('/', '.')|replace('-', '.') }}
 
 source:
+  # No sha256: the server regenerates this tarball per-request (verified
+  # empirically -- two back-to-back downloads give two different
+  # hashes, presumably an on-the-fly repack with a timestamp or file
+  # order that isn't stable), so any pinned hash eventually mismatches.
   url: "https://www.physik.hu-berlin.de/de/pep/tools/Hathor-{{ version }}.tar.gz"
-  {% if versions.get(version, None) %}
-  sha256: {{ versions.get(version) }}
-  {% endif %}
   patches:
     - patches/makefiles.patch
 
