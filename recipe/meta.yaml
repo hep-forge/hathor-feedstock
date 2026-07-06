@@ -11,11 +11,15 @@ package:
   version: {{ environ.get('ANACONDA_VERSION', version)|replace('/', '.')|replace('-', '.') }}
 
 source:
-  # No sha256: the server regenerates this tarball per-request (verified
-  # empirically -- two back-to-back downloads give two different
-  # hashes, presumably an on-the-fly repack with a timestamp or file
-  # order that isn't stable), so any pinned hash eventually mismatches.
-  url: "https://www.physik.hu-berlin.de/de/pep/tools/Hathor-{{ version }}.tar.gz"
+  # The physik.hu-berlin.de mirror is now gated behind an Anubis
+  # bot-challenge page (returns an HTML "not a bot" page instead of the
+  # tarball to non-browser clients), so CI can no longer fetch from it
+  # at all. S. Moch's DESY mirror serves the same file directly and its
+  # sha256 is stable there, matching the hash originally pinned here.
+  url: "https://www-zeuthen.desy.de/~moch/hathor/Hathor-{{ version }}.tar.gz"
+  {% if versions.get(version, None) %}
+  sha256: {{ versions.get(version) }}
+  {% endif %}
   patches:
     - patches/makefiles.patch
 
